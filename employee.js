@@ -17,9 +17,6 @@ connection.connect(function (err) {
     runSearch();
 });
 
-// lookupRoles();
-// lookupEmployee();
-
 let role = [];
 let depts = [];
 let manager = [];
@@ -100,7 +97,7 @@ function runSearch() {
 
 function AllEmployees() {
     connection.query(
-        "select * from employee",
+        "SELECT employee_id,first_name,last_name,title,department,salary,manager_id FROM employee INNER JOIN role ON role.id = role_id INNER JOIN department ON department.id = department_id",
         function (err, res) {
             if (err) throw err;
             console.table(res)
@@ -307,7 +304,7 @@ function lookupRoles() {
     connection.query("SELECT * FROM role", function (err, data) {
         if (err) throw err;
         for (i = 0; i < data.length; i++) {
-            role.push((data[i].role_id + "-" + data[i].title));
+            role.push((data[i].id + "-" + data[i].title));
         }
         return role;
     })
@@ -325,10 +322,11 @@ function lookupEmployee() {
 }
 
 function lookupDepts() {
-    connection.query("SELECT * FROM department", function (err, data) { 
+    connection.query("SELECT * FROM department", function (err, data) {
+
         if (err) throw err;
         for (i = 0; i < data.length; i++) {
-            depts.push((data[i].department_id + "-" + data[i].department))
+            depts.push((data[i].id + "-" + data[i].department))
         }
         return depts;
     })
